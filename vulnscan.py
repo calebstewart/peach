@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
-# @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 03:10:24
+# @Last Modified by:   John Hammond
+# @Last Modified time: 2016-05-27 04:25:54
 import argparse
 import json
 import mimetypes
@@ -15,7 +15,7 @@ from pwn import *
 parser = argparse.ArgumentParser()
 parser.add_argument('directory', help='base directory to evaluate')
 parser.add_argument('-nf', '--nofollow', action='store_false', dest='follow', help='don\'t follow symlinks')
-parser.add_argument('-f', '--follow', action='store_true', dest='follow', default=True, help='follow simlinks (default)')
+parser.add_argument('-f', '--follow', action='store_true', dest='follow', default=True, help='follow symlinks (default)')
 # Not implemented yet
 #parser.add_argument('-t', '--timeout', action='store', type=float, default=5, help='timeout for each scan in seconds (default: 5)')
 args = parser.parse_args()
