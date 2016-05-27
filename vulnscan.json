@@ -1,34 +1,29 @@
 {
-	"scans": {
-
-
-		"Example Scan" : {
+	"scans": [ 
+		{
+			"name": "Example Scan",
 			"module": "examplescan",
 			"class": "ExampleScanner"
-		},
-
-		"Unsafe Functions (python)" : {
+		} , {
+			"name": "Unsafe Functions (python)",
 			"module": "unsafefunction",
 			"class": "UnsafeFunctionPythonScanner",
 			"extensions": [ ".py", ".pyc" ],
 			"mimeTypes": [ "text/x-python" ]
-		},
-
-		"Unsafe Python Modules" : {
+		} , {
+			"name": "Unsafe Python Modules",
 			"module": "scan_python_modules",
 			"class": "ScanPythonModules",
 			"extensions": [ ".py", ".pyc" ],
 			"mimeTypes": [ "text/x-python" ]
-		},
-
-		"GENERIC Catch All" : {
+		} , {
+			"name": "GENERIC Catch All",
 			"module": "scan_catch_all",
 			"class": "ScanCatchAll"
-		},
-
-		"Unsafe Functions (ELF)" : {
+		} , {
+			"name": "Unsafe Functions (ELF)",
 			"module": "unsafefunction",
 			"class": "UnsafeFunctionELFScanner"
 		}
-	}
+	]
 }

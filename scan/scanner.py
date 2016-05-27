@@ -2,25 +2,26 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:19:49
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 02:47:56
+# @Last Modified time: 2016-05-27 12:52:58
 import threading
 import os
+import mimetypes
 from pwn import *
 
 # Generic scanner class
 class Scanner(threading.Thread):
 
-	target = None
-	queue = None
-	file = None
+	WARN = 'WARN'
+	ERROR = 'ERROR'
+	FINISHED = 'FINISHED'
 
 	# `target` is the full path to the target executable.
 	# `queue` is a message queue to signal when the scanner is finished.
-	def __init__(self, target, file, queue):
+	def __init__(self, target, ident, queue):
 		super(Scanner, self).__init__()
 		self.target = target
 		self.queue = queue
-		self.file = file
+		self.ID = ident
 		return
 
 	# The subclass should redefine this!
@@ -33,16 +34,22 @@ class Scanner(threading.Thread):
 		try:
 			self.scan()
 		finally:
-			self.queue.put('COMPLETE')
+			self.queue.put({ 'id': self.ID, 'event': Scanner.FINISHED})
+
+	def hit(self, level, mesg):
+		self.queue.put({ 'id': self.ID, 'event': 'HIT', 'level': level, 'text': mesg })
 
 	# Static method to check if the scan matches the target
 	# 	You may override this in subclasses, but that will
 	#	disable the search terms in vulnscan.json!
 	@staticmethod
-	def match(target, mimetype, file, scan):
-		if mimetype in scan.get('mimeTypes', []):
+	def match(scan, target):
+		mimetype = mimetypes.guess_type(target, strict=False)
+		_,extension = os.path.splitext(target)
+		isexec = os.access(target, os.X_OK)
+		if mimetype in scan['mimeTypes']:
 			return True
-		if os.path.splitext(target)[1] in scan.get('extensions', []):
+		if extension in scan['extensions']:
 			return True
-		if os.access(target, os.X_OK) == True and scan.get('allexec', False) == True:
+		if isexec and scan['allexec']:
 			return True

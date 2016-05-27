@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 # @Author: john
 # @Date:   2016-05-27 08:42:28
-# @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 10:11:10
-import scanner
+# @Last Modified by:   caleb
+# @Last Modified time: 2016-05-27 12:52:36
+from scanner import Scanner
 import re
 from pwn import *
 from colors import *
 
-class ScanPythonModules(scanner.Scanner):
+class ScanPythonModules(Scanner):
 	
 	# Nothing needs to be done here, but you can initialize any object data
 	# you wish to use later on!
-	def __init__(self, target, file, queue):
-		super(ScanPythonModules, self).__init__(target, file, queue)
+	def __init__(self, target, ident, queue):
+		super(ScanPythonModules, self).__init__(target, ident, queue)
 
 		# I note this in a separate variable because they are used in
 		# each regex
@@ -29,6 +29,9 @@ class ScanPythonModules(scanner.Scanner):
 		# I just do some list comprehension here to account for the 
 		# repeated information in each regex flare
 		self.regex_flares = [ flare % dangerous_modules for flare in self.regex_flares ]
+
+		# Open the file
+		self.file = open(target)
 
 
 	# Actually perform the scan.
@@ -57,7 +60,7 @@ class ScanPythonModules(scanner.Scanner):
 					match = matched.group().strip()
 					notify = c(self.target)+ " (line %d): " + R(match)
 					notify = notify % line_number
-					log.warn( notify )
+					self.hit(Scanner.WARN, notify)
 
 			# Account for moving to the next line...
 			line_number += 1

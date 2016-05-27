@@ -2,12 +2,12 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:19:28
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 02:52:53
-import scanner
+# @Last Modified time: 2016-05-27 12:46:09
+from scanner import Scanner
 import subprocess
 from pwn import *
 
-class UnsafeFunctionBinaryScanner(scanner.Scanner):
+class UnsafeFunctionBinaryScanner(Scanner):
 
 	def __init__(self, target, file, queue):
 		super(UnsafeFunctionBinaryScanner, self).__init__(target, file, queue)
@@ -17,7 +17,7 @@ class UnsafeFunctionBinaryScanner(scanner.Scanner):
 		# unsafe function usage.
 		return
 
-class UnsafeFunctionPythonScanner(scanner.Scanner):
+class UnsafeFunctionPythonScanner(Scanner):
 
 	def __init__(self, target, file, queue):
 		super(UnsafeFunctionPythonScanner, self).__init__(target, file, queue)
@@ -27,7 +27,7 @@ class UnsafeFunctionPythonScanner(scanner.Scanner):
 		# unsafe function usage.
 		return
 
-class UnsafeFunctionELFScanner(scanner.Scanner):
+class UnsafeFunctionELFScanner(Scanner):
 
 	# Just to name a few
 	warningFunctions = [ 'system' ]
@@ -42,11 +42,11 @@ class UnsafeFunctionELFScanner(scanner.Scanner):
 		elf = ELF(self.target)
 		for bad in self.warningFunctions:
 			if bad in elf.symbols:
-				log.warn('found bad symbol \'{0}\' in {1}!'.format(bad, self.target))
+				self.hit(Scanner.WARN, 'found bad symbol \'{0}\' in {1}!'.format(bad, self.target))
 		return
 
 	@staticmethod
-	def match(target, mimetype, file, scan):
+	def match(scan, target):
 		try:
 			ELF(target)
 		except:

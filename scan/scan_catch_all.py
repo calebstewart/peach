@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 # @Author: caleb
 # @Date:   2016-05-27 02:59:41
-# @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 10:11:05
-import scanner
+# @Last Modified by:   caleb
+# @Last Modified time: 2016-05-27 12:46:30
+from scanner import Scanner
 import re
 from pwn import *
 from colors import *
 
 
-class ScanCatchAll(scanner.Scanner):
+class ScanCatchAll(Scanner):
 
 	
 	# Nothing needs to be done here, but you can initialize any object data
@@ -54,7 +54,7 @@ class ScanCatchAll(scanner.Scanner):
 					match = matched.group().strip()
 					notify = c(self.target)+ " (line %d): " + R(match)
 					notify = notify % line_number
-					log.warn( notify )
+					self.hit(Scanner.WARN, notify)
 
 			# Account for moving to the next line...
 			line_number += 1
@@ -63,6 +63,6 @@ class ScanCatchAll(scanner.Scanner):
 	# This scanner is purposely meant to handle all files; with that in 
 	# consideration it will always match any target.
 	@staticmethod
-	def match(target, mimetype, file, data):
+	def match(scan, path):
 		return True
 

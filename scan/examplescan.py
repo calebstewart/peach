@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Author: caleb
 # @Date:   2016-05-27 02:59:41
-# @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 09:50:34
-import scanner
+# @Last Modified by:   caleb
+# @Last Modified time: 2016-05-27 12:37:36
+from scanner import Scanner
 import re
 from pwn import *
 # This package has color automatically, inherited from the top-level module
@@ -24,7 +24,7 @@ from pwn import *
 #		static "match" method below. You may implement whatever logic
 #		you desire to match a target file with your scan using this
 #		method.
-class ExampleScanner(scanner.Scanner):
+class ExampleScanner(Scanner):
 
 	
 	# Nothing needs to be done here, but you can initialize any object data
@@ -49,6 +49,7 @@ class ExampleScanner(scanner.Scanner):
 	#	for that file is in self.file. Evaluate the file however you
 	#	wish then output your results to standard output.
 	def scan(self):
+		self.hit(Scanner.WARN, 'This is an example "hit" message!')
 		return
 
 
