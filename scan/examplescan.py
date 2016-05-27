@@ -2,7 +2,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 02:59:41
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 13:06:06
+# @Last Modified time: 2016-05-27 14:39:02
 from scanner import Scanner
 import re
 from pwn import *
@@ -48,7 +48,8 @@ class ExampleScanner(Scanner):
 	#	The target file name is in self.target. Evaluate the file however you
 	#	wish then call self.hit with your results.
 	def scan(self):
-		self.hit(Scanner.WARN, 'This is an example "hit" message!')
+		self.hit("Example Hit", "line 0")
+		# self.hit(Scanner.WARN, 'This is an example "hit" message!')
 		return
 
 

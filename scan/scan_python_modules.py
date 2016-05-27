@@ -2,7 +2,7 @@
 # @Author: john
 # @Date:   2016-05-27 08:42:28
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 13:05:15
+# @Last Modified time: 2016-05-27 14:45:20
 from scanner import Scanner
 import re
 from pwn import *
@@ -58,7 +58,8 @@ class ScanPythonModules(Scanner):
 					match = matched.group().strip()
 					notify = c(self.target)+ " (line %d): " + R(match)
 					notify = notify % line_number
-					self.hit(Scanner.WARN, notify)
+					self.hit('\'' + match + '\' usage', 'line %d' % line_number)
+					# self.hit(Scanner.WARN, notify)
 
 			# Account for moving to the next line...
 			line_number += 1

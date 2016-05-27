@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 12:56:43
+# @Last Modified time: 2016-05-27 14:50:29
 import argparse
 import json
 import os
@@ -15,13 +15,16 @@ import stat
 
 class VulnerabilityScanner:
 
-	config = None
-	scans = []
-
-	def __init__(self, follow = False, timeout = None, config='vulnscan.json'):
+	def __init__(self, follow = False, timeout = None, config='vulnscan.json', output=None):
 		self.follow = follow
 		self.timeout = timeout
-		self.load_config('vulnscan.json')
+		self.scans = []
+		self.output = output
+		self.load_config(config)
+		self.results = {
+			'scanners': [ scan['classname'] for scan in self.scans ],
+			'targets': { }
+		}
 
 	# Load a scan definition from a configuration file
 	def load_scan(self, config):
@@ -30,7 +33,8 @@ class VulnerabilityScanner:
 			"name": config['name'],
 			"extensions": config.get('extensions', []),
 			"mimeTypes": config.get('mimeTypes', []),
-			"allexec": config.get('allexec', False)
+			"allexec": config.get('allexec', False),
+			"classname": config['module'] + '.' + config['class']
 		}
 
 		# Load the module and extract the class
@@ -84,14 +88,35 @@ class VulnerabilityScanner:
 				active_scans[msg['id']].join()
 				scans_left = scans_left - 1
 			elif msg['event'] == 'HIT':
-				if msg['level'] == Scanner.WARN:
-					log.warn(msg['text'])
-				elif msg['level'] == Scanner.ERROR:
-					log.error(msg['text'])
-				else:
-					log.info(msg['text'])
+				self.log(path, active_scans[msg['id']], msg)
+				# if msg['level'] == Scanner.WARN:
+				# 	log.warn(msg['text'])
+				# elif msg['level'] == Scanner.ERROR:
+				# 	log.error(msg['text'])
+				# else:
+				# 	log.info(msg['text'])
+
+		if self.output != None:
+			self.dump(self.output)
 
 		log.info('finished scanning %s' % C(os.path.basename(path)))
+
+	def log(self, target, scanner, mesg):
+		if self.output == None:
+			log.warn('%s (%s): %s' % (c(target), mesg['where'], R(mesg['vuln'])))
+		else:
+			result = {
+				'scanner': scanner.__class__.__name__,
+				'vuln': mesg['vuln'],
+				'where': mesg.get('where', ''),
+			}
+			if self.results['targets'].get(target, None) == None:
+				self.results['targets'][target] = []
+			self.results['targets'][target].append(result)
+
+	def dump(self, filename):
+		with open(filename, 'w') as file:
+			json.dump(self.results, file, indent=4)
 
 	# Scan a directory or a filename
 	def scan(self, filepath):
@@ -109,10 +134,11 @@ parser.add_argument('paths', nargs='+', help='files and directories to scan')
 parser.add_argument('-nf', '--nofollow', action='store_false', dest='follow', help='don\'t follow symlinks (default)')
 parser.add_argument('-f', '--follow', action='store_true', dest='follow', default=False, help='follow symlinks')
 parser.add_argument('-c', '--config', action='store', default='vulnscan.json', help='specify a custom configuration file (default: vulnscan.json)')
+parser.add_argument('-o', '--output', action='store', default=None, help='output results to the specified JSON file')
 # Not implemented yet
 #parser.add_argument('-t', '--timeout', action='store', type=float, default=5, help='timeout for each scan in seconds (default: 5)')
 args = parser.parse_args()
 
-scanner = VulnerabilityScanner(follow=args.follow, config=args.config)
+scanner = VulnerabilityScanner(follow=args.follow, config=args.config, output=args.output)
 for path in args.paths:
 	scanner.scan(path)

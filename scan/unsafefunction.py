@@ -2,7 +2,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:19:28
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 12:46:09
+# @Last Modified time: 2016-05-27 14:42:15
 from scanner import Scanner
 import subprocess
 from pwn import *
@@ -42,7 +42,8 @@ class UnsafeFunctionELFScanner(Scanner):
 		elf = ELF(self.target)
 		for bad in self.warningFunctions:
 			if bad in elf.symbols:
-				self.hit(Scanner.WARN, 'found bad symbol \'{0}\' in {1}!'.format(bad, self.target))
+				self.hit('bad symbol \'%s\'' % bad, 'symbol table')
+				# self.hit(Scanner.WARN, 'found bad symbol \'{0}\' in {1}!'.format(bad, self.target))
 		return
 
 	@staticmethod

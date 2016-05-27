@@ -1,0 +1,18 @@
+{
+    "scanners": [
+        "examplescan.ExampleScanner", 
+        "unsafefunction.UnsafeFunctionPythonScanner", 
+        "scan_python_modules.ScanPythonModules", 
+        "scan_catch_all.ScanCatchAll", 
+        "unsafefunction.UnsafeFunctionELFScanner"
+    ], 
+    "targets": {
+        "test/bad.py": [
+            {
+                "vuln": "'import os' usage", 
+                "where": "line 6", 
+                "scanner": "ScanPythonModules"
+            }
+        ]
+    }
+}

@@ -2,7 +2,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:19:49
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 12:52:58
+# @Last Modified time: 2016-05-27 14:38:20
 import threading
 import os
 import mimetypes
@@ -36,8 +36,11 @@ class Scanner(threading.Thread):
 		finally:
 			self.queue.put({ 'id': self.ID, 'event': Scanner.FINISHED})
 
-	def hit(self, level, mesg):
-		self.queue.put({ 'id': self.ID, 'event': 'HIT', 'level': level, 'text': mesg })
+	def hit(self, vuln, where):
+		self.queue.put({ 'id': self.ID, 'event': 'HIT', 'vuln': vuln, 'where': where})
+
+	# def hit(self, level, mesg):
+	# 	self.queue.put({ 'id': self.ID, 'event': 'HIT', 'level': level, 'text': mesg })
 
 	# Static method to check if the scan matches the target
 	# 	You may override this in subclasses, but that will
