@@ -1,11 +1,9 @@
 {
 	"scans": {
-		"Unsafe Functions (binary)" : {
-			"module": "unsafefunction",
-			"class": "UnsafeFunctionBinaryScanner",
-			"allexec": true,
-			"extensions": [ ".o", "" ]
-		},
+		"Example Scan" : {
+			"module": "examplescan",
+			"class": "ExampleScanner",
+		}
 		"Unsafe Functions (python)" : {
 			"module": "unsafefunction",
 			"class": "UnsafeFunctionPythonScanner",

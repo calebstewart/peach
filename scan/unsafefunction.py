@@ -2,7 +2,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:19:28
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 02:50:50
+# @Last Modified time: 2016-05-27 02:52:53
 import scanner
 import subprocess
 from pwn import *
@@ -30,7 +30,7 @@ class UnsafeFunctionPythonScanner(scanner.Scanner):
 class UnsafeFunctionELFScanner(scanner.Scanner):
 
 	# Just to name a few
-	warningFunctions = [ 'strcpy', 'strcat', 'printf', 'fprintf', 'sprintf' ]
+	warningFunctions = [ 'system' ]
 
 	def __init__(self, target, file, queue):
 		super(UnsafeFunctionELFScanner, self).__init__(target, file, queue)

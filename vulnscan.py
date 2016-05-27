@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 02:15:58
+# @Last Modified time: 2016-05-27 03:10:24
 import argparse
 import json
 import mimetypes
@@ -24,9 +24,17 @@ args = parser.parse_args()
 with open('vulnscan.json') as file:
 	config = json.load(file)
 
+# import the base scan module
+scan = __import__('scan')
+
 # Load all scan classes
 for name in config['scans']:
-	config['scans'][name]['classobj'] = getattr(__import__(config['scans'][name]['module']), config['scans'][name]['class'])
+	# For submodules, __import__ still returns the base module (scan in this case)
+	__import__('scan.'+config['scans'][name]['module'])
+	# So, we need to find the newly loaded module within the scan module after loading
+	module = getattr(scan, config['scans'][name]['module'])
+	# NOW, we can find the class name within that module... D:
+	config['scans'][name]['classobj'] = getattr(module, config['scans'][name]['class'])
 
 # Perform all relevant scans on a given target
 def scan_target(target):
