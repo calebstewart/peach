@@ -2,7 +2,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 02:59:41
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 08:53:44
+# @Last Modified time: 2016-05-27 08:55:05
 import scanner
 import re
 from colorama import *
@@ -66,7 +66,7 @@ class ExampleScanner(scanner.Scanner):
 
 				if ( matched ):
 					match = matched.group()
-					notify = Fore.CYAN + self.target + Fore.RESET + "%s (line %d): " + Fore.RED + Style.BRIGHT + "%s" +  Fore.RESET + Style.NORMAL
+					notify = Fore.CYAN + self.target + Fore.RESET + " (line %d): " + Fore.RED + Style.BRIGHT + "%s" +  Fore.RESET + Style.NORMAL
 					notify = notify % ( line_number, match )
 					log.warn( notify )
 
