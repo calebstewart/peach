@@ -2,12 +2,11 @@
 # @Author: john
 # @Date:   2016-05-27 08:42:28
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 09:04:15
+# @Last Modified time: 2016-05-27 09:51:11
 import scanner
 import re
 from pwn import *
-from colorama import *
-
+# This package has color automatically, inherited from the top-level module
 
 class ScanPythonModules(scanner.Scanner):
 	
@@ -18,7 +17,7 @@ class ScanPythonModules(scanner.Scanner):
 
 		# I note this in a separate variable because they are used in
 		# each regex
-		dangerous_modules = '(__os__|os|subprocess|sh|commands)'
+		dangerous_modules = '(__os__|os|subprocess|sh|commands|fabric|paramiko|pickle)'
 
 
 		self.regex_flares = [
@@ -37,7 +36,7 @@ class ScanPythonModules(scanner.Scanner):
 	#	for that file is in self.file. Evaluate the file however you
 	#	wish then output your results to standard output.
 	def scan(self):
-		self.check_flares()
+		self.report_flares()
 		return
 
 
@@ -45,7 +44,7 @@ class ScanPythonModules(scanner.Scanner):
 	# task: run through the file to detect and report any regex flares.
 	# In your own scanner you can simply set the self.regex_flares list and 
 	# call this function to find the occurences of anything you would like.
-	def check_flares(self):
+	def report_flares(self):
 
 		# Start keeping track of the position...
 		line_number = 1
@@ -56,8 +55,8 @@ class ScanPythonModules(scanner.Scanner):
 
 				if ( matched ):
 					match = matched.group().strip()
-					notify = Fore.CYAN + self.target + Fore.RESET + " (line %d): " + Fore.RED + Style.BRIGHT + "%s" +  Fore.RESET + Style.NORMAL
-					notify = notify % ( line_number, match )
+					notify = c(self.target)+ " (line %d): " + R(match)
+					notify = notify % line_number
 					log.warn( notify )
 
 			# Account for moving to the next line...

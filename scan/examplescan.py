@@ -2,11 +2,11 @@
 # @Author: caleb
 # @Date:   2016-05-27 02:59:41
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 09:43:03
+# @Last Modified time: 2016-05-27 09:50:34
 import scanner
 import re
 from pwn import *
-# This package has color automatically, from the vulnscan package
+# This package has color automatically, inherited from the top-level module
 
 # This is a very simple example scanner!
 # 	The example entry in vulnscan.json has no match criteria, therefore
@@ -56,7 +56,7 @@ class ExampleScanner(scanner.Scanner):
 	# task: run through the file to detect and report any regex flares.
 	# In your own scanner you can simply set the self.regex_flares list and 
 	# call this function to find the occurences of anything you would like.
-	def check_flares(self):
+	def report_flares(self):
 
 		# Start keeping track of the position...
 		line_number = 1
