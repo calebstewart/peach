@@ -2,7 +2,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 02:59:41
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 12:46:30
+# @Last Modified time: 2016-05-27 13:06:57
 from scanner import Scanner
 import re
 from pwn import *
@@ -30,9 +30,8 @@ class ScanCatchAll(Scanner):
 
 
 	# Actually perform the scan.
-	#	The target file name is in self.target, and an open file object
-	#	for that file is in self.file. Evaluate the file however you
-	#	wish then output your results to standard output.
+	#	The target file name is in self.target. Evaluate the file however you
+	#	wish then call self.hit with your results.
 	def scan(self):
 		return
 
@@ -45,8 +44,10 @@ class ScanCatchAll(Scanner):
 
 		# Start keeping track of the position...
 		line_number = 1
+		# open the file
+		file = open(self.target)
 
-		for line in self.file.readlines():
+		for line in file.readlines():
 			for flare in self.regex_flares:
 				matched = re.search( flare, line )
 
@@ -59,6 +60,7 @@ class ScanCatchAll(Scanner):
 			# Account for moving to the next line...
 			line_number += 1
 
+		file.close()
 
 	# This scanner is purposely meant to handle all files; with that in 
 	# consideration it will always match any target.

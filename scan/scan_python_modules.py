@@ -2,7 +2,7 @@
 # @Author: john
 # @Date:   2016-05-27 08:42:28
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 12:52:36
+# @Last Modified time: 2016-05-27 13:05:15
 from scanner import Scanner
 import re
 from pwn import *
@@ -30,14 +30,10 @@ class ScanPythonModules(Scanner):
 		# repeated information in each regex flare
 		self.regex_flares = [ flare % dangerous_modules for flare in self.regex_flares ]
 
-		# Open the file
-		self.file = open(target)
-
 
 	# Actually perform the scan.
-	#	The target file name is in self.target, and an open file object
-	#	for that file is in self.file. Evaluate the file however you
-	#	wish then output your results to standard output.
+	#	The target file name is in self.target, Evaluate the file however you
+	#	wish then call self.hit with the result text.
 	def scan(self):
 		self.report_flares()
 		return
@@ -51,8 +47,10 @@ class ScanPythonModules(Scanner):
 
 		# Start keeping track of the position...
 		line_number = 1
+		# open the file
+		file = open(self.target)
 
-		for line in self.file.readlines():
+		for line in file.readlines():
 			for flare in self.regex_flares:
 				matched = re.search( flare, line )
 
@@ -64,6 +62,9 @@ class ScanPythonModules(Scanner):
 
 			# Account for moving to the next line...
 			line_number += 1
+
+		# close the file
+		file.close()
 
 
 	# You may use this static method to match this scan with a specific
