@@ -52,3 +52,5 @@ That's it! The idea behind the tool is simple; the real power comes from buildin
 [command-line arguments]: https://www.cs.bu.edu/teaching/c/program-args/
 [program arguments]: https://www.cs.bu.edu/teaching/c/program-args/
 [ELF]: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+[colorama]: https://pypi.python.org/pypi/colorama
+[constructor]: https://en.wikipedia.org/wiki/Constructor_%28object-oriented_programming%29
