@@ -2,7 +2,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:19:49
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 02:16:50
+# @Last Modified time: 2016-05-27 02:47:56
 import threading
 import os
 from pwn import *
@@ -30,8 +30,10 @@ class Scanner(threading.Thread):
 
 	# Run the scanner, then signal the parent we are done.
 	def run(self):
-		self.scan()
-		self.queue.put('COMPLETE')
+		try:
+			self.scan()
+		finally:
+			self.queue.put('COMPLETE')
 
 	# Static method to check if the scan matches the target
 	# 	You may override this in subclasses, but that will
