@@ -9,7 +9,7 @@ All other `.py` files in this folder are specific scanners that have been tailor
 
 * Executing [Shell] commands ( i.e. `os.system('/bin/bash')` )
 * Sensitive Files ( i.e. `/etc/shadow` )
-* Unsanitized SQL statements ( i.e. `"SELECT " + column + "FROM books_db"` )
+* Unsanitized [SQL] statements ( i.e. `"SELECT " + column + "FROM books_db"` )
 * Dangerous [ELF] Symbols ( i.e. `gets`, `strcat` )
 
 ... and more! 
@@ -23,3 +23,5 @@ All other `.py` files in this folder are specific scanners that have been tailor
 [command-line arguments]: https://www.cs.bu.edu/teaching/c/program-args/
 [program arguments]: https://www.cs.bu.edu/teaching/c/program-args/
 [ELF]: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+[shell]: https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29
+[SQL]: https://en.wikipedia.org/wiki/SQL
