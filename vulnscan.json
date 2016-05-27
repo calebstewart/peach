@@ -1,0 +1,16 @@
+{
+	"scans": {
+		"Unsafe Functions (binary)" : {
+			"module": "unsafefunction",
+			"class": "UnsafeFunctionBinaryScanner",
+			"allexec": true,
+			"extensions": [ ".o", "" ]
+		},
+		"Unsafe Functions (python)" : {
+			"module": "unsafefunction",
+			"class": "UnsafeFunctionPythonScanner",
+			"extensions": [ ".py", ".pyc" ],
+			"mimeTypes": [ "text/x-python" ]
+		}
+	}
+}
