@@ -2,9 +2,10 @@
 # @Author: caleb
 # @Date:   2016-05-27 02:59:41
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 08:55:05
+# @Last Modified time: 2016-05-27 08:55:49
 import scanner
 import re
+from pwn import *
 from colorama import *
 
 # This is a very simple example scanner!
