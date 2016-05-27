@@ -1,35 +1,33 @@
 # -*- coding: utf-8 -*-
-# @Author: john
-# @Date:   2016-05-27 08:42:28
+# @Author: caleb
+# @Date:   2016-05-27 02:59:41
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 10:05:24
+# @Last Modified time: 2016-05-27 10:05:27
 import scanner
 import re
 from pwn import *
 from colors import *
 # This package has color automatically, inherited from the top-level module
 
-class ScanPythonModules(scanner.Scanner):
+
+class ScanCatchAll(scanner.Scanner):
+
 	
 	# Nothing needs to be done here, but you can initialize any object data
 	# you wish to use later on!
 	def __init__(self, target, file, queue):
-		super(ScanPythonModules, self).__init__(target, file, queue)
-
-		# I note this in a separate variable because they are used in
-		# each regex
-		dangerous_modules = '(__os__|os|subprocess|sh|commands|fabric|paramiko|pickle)'
+		super(ScanCatchAll, self).__init__(target, file, queue)
 
 
+
+		# In this list you can add any Regex patterns you want to report
+		# on. This is added for convenience since many scanners may just be
+		# hunting for occurences of dangerous or vulnerable code. 
 		self.regex_flares = [
 			
-			'from\s*%s\s*import\s*([A-Za-z,*]*)',
-			'import\s*([A-Za-z]*)?(,?)(\s)?%s([A-Za-z,]*)?(,?)(\s)?',
+			# By default this is intialized to be empty; you should populate
+			# it in your own scanner!
 		]
-
-		# I just do some list comprehension here to account for the 
-		# repeated information in each regex flare
-		self.regex_flares = [ flare % dangerous_modules for flare in self.regex_flares ]
 
 
 	# Actually perform the scan.
@@ -37,7 +35,6 @@ class ScanPythonModules(scanner.Scanner):
 	#	for that file is in self.file. Evaluate the file however you
 	#	wish then output your results to standard output.
 	def scan(self):
-		self.report_flares()
 		return
 
 
@@ -64,11 +61,9 @@ class ScanPythonModules(scanner.Scanner):
 			line_number += 1
 
 
-	# You may use this static method to match this scan with a specific
-	#	file type. This is INSTEAD OF the specifiers in vulnscan.py
-	#	(e.g. mimeTypes, extensions, and allexec). If you override this
-	#	method those fields become ignored. This evaluation should be
-	#	quick and return either true or false.
-	# @staticmethod
-	# def match(target, mimetype, file, data):
-	# 	return False
+	# This scanner is purposely meant to handle all files; with that in 
+	# consideration it will always match any target.
+	@staticmethod
+	def match(target, mimetype, file, data):
+		return True
+
