@@ -38,6 +38,8 @@ File & Directory Information
 
 	This is the core of the utility; the [Python] script that kickstarts all [threads] and scans from the given [command-line arguments]. 
 
+That's it! The idea behind the tool is simple; the real power comes from building scanners to detect and report any mischievous content or code in large amounts of unknown data. So add your own scanner!
+ 
 [JSON]: https://en.wikipedia.org/wiki/JSON
 [MIME type]: https://en.wikipedia.org/wiki/Media_type
 [Python]: http://python.org/
@@ -45,3 +47,4 @@ File & Directory Information
 [threads]: https://en.wikipedia.org/wiki/Thread_%28computing%29
 [command-line arguments]: https://www.cs.bu.edu/teaching/c/program-args/
 [program arguments]: https://www.cs.bu.edu/teaching/c/program-args/
+[ELF]: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
