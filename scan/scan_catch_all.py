@@ -2,12 +2,11 @@
 # @Author: caleb
 # @Date:   2016-05-27 02:59:41
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 10:05:27
+# @Last Modified time: 2016-05-27 10:11:05
 import scanner
 import re
 from pwn import *
 from colors import *
-# This package has color automatically, inherited from the top-level module
 
 
 class ScanCatchAll(scanner.Scanner):

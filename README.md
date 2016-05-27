@@ -22,21 +22,25 @@ optional arguments:
 File & Directory Information
 ------
 
+* [`vulnscan.py`](vulnscan.py)
+
+	This is the core of the utility; the [Python] script that kickstarts all [threads] and scans from the given [command-line arguments]. 
+
 * [`scan`](scan/)
 	
 	This directory hosts all the classes that can be duplicated and extended for specific file "scans," in which you could do pretty much anything you want. They are just housed in this folder to keep things clean.
-
-* [`test`](test/)
-
-	This directory holds anything that has been often used to test some of the scanners. You can add to it as you please.
 
 * [`vulnscan.json`](vulnscan.json)
 
 	This acts like the global configuation; in this [JSON] file you specify what scans you want to run for all of the files processed, and determine whatever criteria you want to use to identify those files (file extension, [MIME type], or executable).
 
-* [`vulnscan.py`](vulnscan.py)
+* [`test`](test/)
 
-	This is the core of the utility; the [Python] script that kickstarts all [threads] and scans from the given [command-line arguments]. 
+	This directory holds anything that has been often used to test some of the scanners. You can add to it as you please.
+
+* [`colors`](colors/)
+
+	This small package (I don't know if I would even call it that) acts as a wrapper for [`colorama`][colorama], in an effort to supply some shorthand function calls.
 
 That's it! The idea behind the tool is simple; the real power comes from building scanners to detect and report any mischievous content or code in large amounts of unknown data. So add your own scanner!
  

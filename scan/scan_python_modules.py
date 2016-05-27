@@ -2,12 +2,11 @@
 # @Author: john
 # @Date:   2016-05-27 08:42:28
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 10:05:24
+# @Last Modified time: 2016-05-27 10:11:10
 import scanner
 import re
 from pwn import *
 from colors import *
-# This package has color automatically, inherited from the top-level module
 
 class ScanPythonModules(scanner.Scanner):
 	
