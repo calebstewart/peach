@@ -3,7 +3,7 @@
 		"Example Scan" : {
 			"module": "examplescan",
 			"class": "ExampleScanner",
-		}
+		},
 		"Unsafe Functions (python)" : {
 			"module": "unsafefunction",
 			"class": "UnsafeFunctionPythonScanner",
