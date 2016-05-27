@@ -2,8 +2,9 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:19:49
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 01:52:00
+# @Last Modified time: 2016-05-27 02:16:50
 import threading
+import os
 from pwn import *
 
 # Generic scanner class
@@ -31,3 +32,15 @@ class Scanner(threading.Thread):
 	def run(self):
 		self.scan()
 		self.queue.put('COMPLETE')
+
+	# Static method to check if the scan matches the target
+	# 	You may override this in subclasses, but that will
+	#	disable the search terms in vulnscan.json!
+	@staticmethod
+	def match(target, mimetype, file, scan):
+		if mimetype in scan.get('mimeTypes', []):
+			return True
+		if os.path.splitext(target)[1] in scan.get('extensions', []):
+			return True
+		if os.access(target, os.X_OK) == True and scan.get('allexec', False) == True:
+			return True
