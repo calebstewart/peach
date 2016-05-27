@@ -1,47 +1,34 @@
 # -*- coding: utf-8 -*-
-# @Author: caleb
-# @Date:   2016-05-27 02:59:41
+# @Author: john
+# @Date:   2016-05-27 08:42:28
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 09:43:03
+# @Last Modified time: 2016-05-27 09:43:08
 import scanner
 import re
 from pwn import *
 # This package has color automatically, from the vulnscan package
 
-# This is a very simple example scanner!
-# 	The example entry in vulnscan.json has no match criteria, therefore
-#	the example scanner will never match any target, but here are some
-#	options for matching:
-#
-#	In vulnscan.json:
-#		"mimeTypes": An array of mime type strings which match this scan.
-#		"extensions": An array of file extensions which match this scan.
-#						The extension INCLUDES the period! e.g. a C++ source
-#						file extension is ".cpp".
-#		"allexec": This means that the scan matches all executable files.
-#	Within this source file:
-#		You may override all vulnscan.json criteria by overriding the
-#		static "match" method below. You may implement whatever logic
-#		you desire to match a target file with your scan using this
-#		method.
-class ExampleScanner(scanner.Scanner):
-
+class ScanPythonModules(scanner.Scanner):
 	
 	# Nothing needs to be done here, but you can initialize any object data
 	# you wish to use later on!
 	def __init__(self, target, file, queue):
-		super(ExampleScanner, self).__init__(target, file, queue)
+		super(ScanPythonModules, self).__init__(target, file, queue)
+
+		# I note this in a separate variable because they are used in
+		# each regex
+		dangerous_modules = '(__os__|os|subprocess|sh|commands)'
 
 
-
-		# In this list you can add any Regex patterns you want to report
-		# on. This is added for convenience since many scanners may just be
-		# hunting for occurences of dangerous or vulnerable code. 
 		self.regex_flares = [
 			
-			# By default this is intialized to be empty; you should populate
-			# it in your own scanner!
+			'from\s*%s\s*import\s*([A-Za-z,*]*)',
+			'import\s*([A-Za-z]*)?(,?)(\s)?%s([A-Za-z,]*)?(,?)(\s)?',
 		]
+
+		# I just do some list comprehension here to account for the 
+		# repeated information in each regex flare
+		self.regex_flares = [ flare % dangerous_modules for flare in self.regex_flares ]
 
 
 	# Actually perform the scan.
@@ -49,6 +36,7 @@ class ExampleScanner(scanner.Scanner):
 	#	for that file is in self.file. Evaluate the file however you
 	#	wish then output your results to standard output.
 	def scan(self):
+		self.check_flares()
 		return
 
 
