@@ -2,7 +2,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 02:59:41
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 04:43:21
+# @Last Modified time: 2016-05-27 08:47:31
 import scanner
 
 from colorama import *
@@ -61,7 +61,7 @@ class ExampleScanner(scanner.Scanner):
 		line_number = 1
 
 		for line in self.file.readlines():
-			for flare in flares:
+			for flare in self.regex_flares:
 				matched = re.search( flare, line )
 
 				if ( matched ):
