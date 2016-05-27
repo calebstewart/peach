@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 01:42:15
+# @Last Modified time: 2016-05-27 01:52:55
 import argparse
 import json
 import mimetypes
@@ -34,14 +34,13 @@ def scan_target(target):
 	mimetype = mimetypes.guess_type(target, strict=False)
 	_, ext = os.path.splitext(target)
 	is_exec = os.access(target, os.X_OK)
+	file = open(target)
 	scan_count = 0
 	for name in config['scans']:
 		scan = config['scans'][name]
-		if mimetype in scan.get('mimeTypes', []) or \
-				ext in scan.get('extensions', []) or \
-				(is_exec and scan.get('allexec', False) == True):
+		if mimetype in scan.get('mimeTypes', []) or ext in scan.get('extensions', []) or (is_exec and scan.get('allexec', False) == True):
 			log.info('scanning {1} for {0}'.format(name, os.path.basename(target)))
-			scan['classobj'](target, queue).start()
+			scan['classobj'](target, file, queue).start()
 			scan_count = scan_count + 1
 	log.info('started {0} scans for target {1}'.format(scan_count, os.path.basename(target)))
 	# Wait for scans to finish
