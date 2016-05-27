@@ -1,21 +1,26 @@
 {
 	"scans": {
+
+
 		"Example Scan" : {
 			"module": "examplescan",
 			"class": "ExampleScanner"
 		},
+
 		"Unsafe Functions (python)" : {
 			"module": "unsafefunction",
 			"class": "UnsafeFunctionPythonScanner",
 			"extensions": [ ".py", ".pyc" ],
 			"mimeTypes": [ "text/x-python" ]
 		},
+
 		"Unsafe Python Modules" : {
 			"module": "scan_python_modules",
 			"class": "ScanPythonModules",
 			"extensions": [ ".py", ".pyc" ],
 			"mimeTypes": [ "text/x-python" ]
 		},
+		
 		"Unsafe Functions (ELF)" : {
 			"module": "unsafefunction",
 			"class": "UnsafeFunctionELFScanner"

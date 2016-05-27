@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   John Hammond
-# @Last Modified time: 2016-05-27 04:25:54
+# @Last Modified time: 2016-05-27 09:13:18
 import argparse
 import json
 import mimetypes
@@ -55,9 +55,13 @@ def scan_target(target):
 	for name in config['scans']:
 		scan = config['scans'][name]
 		if scan['classobj'].match(target, mimetype, file, scan):
+			# log.info('started {0} scans for target {1}'.format(scan_count, os.path.basename(target)))
+			log.info('started scan "{0}" for target {1}'.format(name, os.path.basename(target)))
 			scan['classobj'](target, file, queue).start()
 			scan_count = scan_count + 1
-	log.info('started {0} scans for target {1}'.format(scan_count, os.path.basename(target)))
+
+	total_scans = scan_count
+
 	# Wait for scans to finish
 	while scan_count > 0:
 		try:
@@ -65,6 +69,7 @@ def scan_target(target):
 			scan_count = scan_count - 1 # decrease the number of scans we are waiting on decrease 
 		except Exception, e:
 			raise e
+	log.info('finished a total of {0} scans for target {1}'.format(total_scans, os.path.basename(target)))
 
 # Walk the directories and iterate over every file
 for dirname, dirlist, filelist in os.walk(args.directory, followlinks=args.follow):
