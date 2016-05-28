@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 14:50:29
+# @Last Modified time: 2016-05-27 16:52:11
 import argparse
 import json
 import os
@@ -110,9 +110,9 @@ class VulnerabilityScanner:
 				'vuln': mesg['vuln'],
 				'where': mesg.get('where', ''),
 			}
-			if self.results['targets'].get(target, None) == None:
-				self.results['targets'][target] = []
-			self.results['targets'][target].append(result)
+			if self.results['targets'].get(os.path.abspath(target), None) == None:
+				self.results['targets'][os.path.abspath(target)] = []
+			self.results['targets'][os.path.abspath(target)].append(result)
 
 	def dump(self, filename):
 		with open(filename, 'w') as file:

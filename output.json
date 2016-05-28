@@ -7,7 +7,7 @@
         "unsafefunction.UnsafeFunctionELFScanner"
     ], 
     "targets": {
-        "test/bad.py": [
+        "/home/caleb/Development/vulnscan/test/bad.py": [
             {
                 "vuln": "'import os' usage", 
                 "where": "line 6", 
