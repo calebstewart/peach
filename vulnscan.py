@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-27 16:52:11
+# @Last Modified time: 2016-05-29 15:51:21
 import argparse
 import json
 import os
@@ -20,31 +20,25 @@ class VulnerabilityScanner:
 		self.timeout = timeout
 		self.scans = []
 		self.output = output
+		self.queue = Queue()
 		self.load_config(config)
 		self.results = {
-			'scanners': [ scan['classname'] for scan in self.scans ],
+			'scanners': [ scan.__module__ + '.' + scan.__class__.__name__ for scan in self.scans ],
 			'targets': { }
 		}
 
 	# Load a scan definition from a configuration file
-	def load_scan(self, config):
-		# Build a scan object based on the configuration information
-		scan = {
-			"name": config['name'],
-			"extensions": config.get('extensions', []),
-			"mimeTypes": config.get('mimeTypes', []),
-			"allexec": config.get('allexec', False),
-			"classname": config['module'] + '.' + config['class']
-		}
-
+	def load_scan(self, classname):
 		# Load the module and extract the class
-		pkg = __import__('scan.' + config['module'])
-		module = getattr(pkg, config['module'])
-		classobj = getattr(module, config['class'])
-		scan['class'] = classobj
+		modulename = 'scan.' + '.'.join(classname.split('.')[:-1])
+		pkg = __import__(modulename)
+		classobj = pkg # This will be the "scan" module first
+		for name in classname.split('.'):
+			classobj = getattr(classobj, name)
+		scanner = classobj(len(self.scans), self.queue)
 
 		# Add the new scan
-		self.scans.append(scan)
+		self.scans.append(scanner)
 
 	# Load a configuration file
 	def load_config(self, filename):
@@ -55,7 +49,7 @@ class VulnerabilityScanner:
 			log.error('unable to load config file.')
 			pass
 
-		for scan in self.config['scans']:
+		for scan in self.config['scanners']:
 			self.load_scan(scan)
 
 
@@ -70,31 +64,22 @@ class VulnerabilityScanner:
 
 	# Run all matching scanners on the given file path
 	def scan_file(self, path):
-		msgs = Queue()
-		active_scans = []
+		active_scans = 0
 		# Match scanners to the file and start them
 		for scan in self.scans:
-			if scan['class'].match(scan, path):
-				log.info('started scan {0} for target {1}'.format(y(scan['name']), C(os.path.basename(path))))
-				active_scans.append(scan['class'](path, len(active_scans), msgs))
-				active_scans[-1].start()
-
-		scans_left = len(active_scans)
+			if scan.match(path):
+				log.info('started {0} for target {1}'.format(y(scan.name), C(os.path.basename(path))))
+				active_scans = active_scans + 1
+				scan.start(path)
 
 		# Wait for scanners to finish
-		while scans_left != 0:
-			msg = msgs.get()
+		while active_scans != 0:
+			msg = self.queue.get()
 			if msg['event'] == Scanner.FINISHED:
-				active_scans[msg['id']].join()
-				scans_left = scans_left - 1
+				self.scans[msg['id']].wait()
+				active_scans = active_scans - 1
 			elif msg['event'] == 'HIT':
-				self.log(path, active_scans[msg['id']], msg)
-				# if msg['level'] == Scanner.WARN:
-				# 	log.warn(msg['text'])
-				# elif msg['level'] == Scanner.ERROR:
-				# 	log.error(msg['text'])
-				# else:
-				# 	log.info(msg['text'])
+				self.log(path, self.scans[msg['id']], msg)
 
 		if self.output != None:
 			self.dump(self.output)
@@ -106,7 +91,7 @@ class VulnerabilityScanner:
 			log.warn('%s (%s): %s' % (c(target), mesg['where'], R(mesg['vuln'])))
 		else:
 			result = {
-				'scanner': scanner.__class__.__name__,
+				'scanner': scanner.__module__ + '.' + scanner.__class__.__name__,
 				'vuln': mesg['vuln'],
 				'where': mesg.get('where', ''),
 			}
