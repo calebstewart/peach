@@ -2,7 +2,7 @@
 # @Author: john
 # @Date:   2016-05-27 08:42:28
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-29 15:40:52
+# @Last Modified time: 2016-05-29 17:27:35
 from regexscanner import RegexScanner
 import re
 
@@ -28,7 +28,7 @@ class ModuleScanner(RegexScanner):
 		# Define the patterns RegexScanner will use
 		self.patterns = [
 			{
-				'name': 'Dangerous Import',
+				'name': '{0}',
 				're': re.compile(flare % dangerous_modules)
 			} for flare in regex_flares
 		]
