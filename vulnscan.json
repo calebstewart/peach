@@ -1,5 +1,6 @@
 {
 	"scanners": [
-		"pythonscanner.ModuleScanner"
+		"pythonscanner.ModuleScanner",
+		"pythonscanner.FunctionScanner"
 	]
 } 

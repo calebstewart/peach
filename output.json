@@ -1,27 +1,19 @@
 {
     "scanners": [
-        "scan.pythonscanner.ModuleScanner"
+        "scan.pythonscanner.ModuleScanner", 
+        "scan.pythonscanner.FunctionScanner"
     ], 
     "targets": {
-        "/home/caleb/Development/vulnscan/scan/scanner.py": [
-            {
-                "vuln": "import os", 
-                "where": "line 6", 
-                "scanner": "scan.pythonscanner.ModuleScanner"
-            }
-        ], 
-        "/home/caleb/Development/vulnscan/vulnscan.py": [
-            {
-                "vuln": "import os", 
-                "where": "line 8", 
-                "scanner": "scan.pythonscanner.ModuleScanner"
-            }
-        ], 
         "/home/caleb/Development/vulnscan/test/bad.py": [
             {
-                "vuln": "import os", 
-                "where": "line 5", 
+                "vuln": "importing unsafe module 'os'", 
+                "where": "line 6", 
                 "scanner": "scan.pythonscanner.ModuleScanner"
+            }, 
+            {
+                "vuln": "call to unsafe function 'system'", 
+                "where": "line 9", 
+                "scanner": "scan.pythonscanner.FunctionScanner"
             }
         ]
     }

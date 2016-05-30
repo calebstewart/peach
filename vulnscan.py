@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-30 01:12:56
+# @Last Modified time: 2016-05-30 12:11:35
 import argparse
 import json
 import os
@@ -15,12 +15,13 @@ import stat
 
 class VulnerabilityScanner:
 
-	def __init__(self, follow = False, timeout = None, config='vulnscan.json', output=None):
+	def __init__(self, scanHidden = True, follow = False, timeout = None, config='vulnscan.json', output=None):
 		self.follow = follow
 		self.timeout = timeout
 		self.scans = []
 		self.output = output
 		self.queue = Queue()
+		self.scanHidden = scanHidden
 		self.load_config(config)
 		self.results = {
 			'scanners': [ scan.__module__ + '.' + scan.__class__.__name__ for scan in self.scans ],
@@ -57,8 +58,9 @@ class VulnerabilityScanner:
 	# on all matching files within the tree.
 	def scan_dir(self, directory):
 		for dirname, dirlist, filelist in os.walk(directory, followlinks=self.follow):
-#			for d in dirlist:
-#				self.scan(os.path.join(dirname, d))
+			if not self.scanHidden:
+				filelist = [f for f in filelist if not f.startswith('.')]
+				dirlist[:] = [d for d in dirlist if not d.startswith('.')]
 			for f in filelist:
 				self.scan(os.path.join(dirname, f))
 
@@ -120,10 +122,12 @@ parser.add_argument('-nf', '--nofollow', action='store_false', dest='follow', he
 parser.add_argument('-f', '--follow', action='store_true', dest='follow', default=False, help='follow symlinks')
 parser.add_argument('-c', '--config', action='store', default='vulnscan.json', help='specify a custom configuration file (default: vulnscan.json)')
 parser.add_argument('-o', '--output', action='store', default=None, help='output results to the specified JSON file')
+parser.add_argument('-sh', '--scan-hidden', action='store_true', default=True, dest='scanHidden', help='Scan hidden files and directories (default)')
+parser.add_argument('-nh', '--no-hidden', action='store_false', dest='scanHidden', help='Do not scan hidden files and directories')
 # Not implemented yet
 #parser.add_argument('-t', '--timeout', action='store', type=float, default=5, help='timeout for each scan in seconds (default: 5)')
 args = parser.parse_args()
 
-scanner = VulnerabilityScanner(follow=args.follow, config=args.config, output=args.output)
+scanner = VulnerabilityScanner(scanHidden=args.scanHidden, follow=args.follow, config=args.config, output=args.output)
 for path in args.paths:
 	scanner.scan(path)

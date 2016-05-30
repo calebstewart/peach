@@ -2,7 +2,7 @@
 # @Author: caleb
 # @Date:   2016-05-29 14:23:44
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-29 17:26:19
+# @Last Modified time: 2016-05-30 12:40:07
 from scanner import Scanner
 import re
 
@@ -27,12 +27,12 @@ class RegexScanner(Scanner):
 				for p in self.patterns:
 					match = p['re'].search(line)
 					if match:
-						if len(match.groupdict()) > 0:
-							groups = list(match.group(range(0, len(match.groupdict())+1)))
+						if len(match.groups()) > 0:
+							groups = [match.group(0)] + [ g if g != None else '' for g in match.groups() ]
 						else:
 							groups = [match.group(0)]
 						groups = [ group.strip() for group in groups ]
-						self.hit(p['name'].format(*groups), 'line {0}'.format(lineno))
+						self.hit(p['name'].format(*groups), 'line {0}'.format(lineno+1))
 
 # Example implementation of the RegexScanner
 # This scanner will match files with text/plain mime type
