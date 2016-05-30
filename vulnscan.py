@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   caleb
-# @Last Modified time: 2016-05-29 15:51:21
+# @Last Modified time: 2016-05-30 01:12:56
 import argparse
 import json
 import os
@@ -57,8 +57,8 @@ class VulnerabilityScanner:
 	# on all matching files within the tree.
 	def scan_dir(self, directory):
 		for dirname, dirlist, filelist in os.walk(directory, followlinks=self.follow):
-			for d in dirlist:
-				self.scan(os.path.join(dirname, d))
+#			for d in dirlist:
+#				self.scan(os.path.join(dirname, d))
 			for f in filelist:
 				self.scan(os.path.join(dirname, f))
 

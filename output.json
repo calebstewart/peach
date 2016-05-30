@@ -1,31 +1,25 @@
 {
     "scanners": [
-        "scan.examplescanner.ExampleScanner", 
         "scan.pythonscanner.ModuleScanner"
     ], 
     "targets": {
-        "/home/caleb/Development/vulnscan/test/ls": [
+        "/home/caleb/Development/vulnscan/scan/scanner.py": [
             {
-                "vuln": "Example Hit", 
-                "where": "line 0", 
-                "scanner": "scan.examplescanner.ExampleScanner"
+                "vuln": "import os", 
+                "where": "line 6", 
+                "scanner": "scan.pythonscanner.ModuleScanner"
             }
         ], 
-        "/home/caleb/Development/vulnscan/test/README.md": [
+        "/home/caleb/Development/vulnscan/vulnscan.py": [
             {
-                "vuln": "Example Hit", 
-                "where": "line 0", 
-                "scanner": "scan.examplescanner.ExampleScanner"
+                "vuln": "import os", 
+                "where": "line 8", 
+                "scanner": "scan.pythonscanner.ModuleScanner"
             }
         ], 
         "/home/caleb/Development/vulnscan/test/bad.py": [
             {
-                "vuln": "Example Hit", 
-                "where": "line 0", 
-                "scanner": "scan.examplescanner.ExampleScanner"
-            }, 
-            {
-                "vuln": "Dangerous Import", 
+                "vuln": "import os", 
                 "where": "line 5", 
                 "scanner": "scan.pythonscanner.ModuleScanner"
             }
