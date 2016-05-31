@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 16:41:06
+# @Last Modified time: 2016-05-31 16:46:43
 import argparse
 import json
 import os
@@ -47,8 +47,9 @@ class VulnerabilityScanner:
 			with open(filename) as file:
 				self.config = json.load(file)
 		except Exception as e:
-			log.error('unable to load config file.')
-			pass
+			raise e
+			#log.error('unable to load config file.')
+			#pass
 
 		for scan in self.config['scanners']:
 			self.load_scan(scan)

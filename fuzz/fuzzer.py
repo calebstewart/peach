@@ -2,7 +2,7 @@
 # @Author: Caleb Stewart
 # @Date:   2016-05-31 16:04:38
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 16:29:26
+# @Last Modified time: 2016-05-31 16:55:22
 from scan.scanner import Scanner
 from pwn import *
 import time
@@ -11,7 +11,7 @@ import signal
 
 class Fuzzer(Scanner):
 	
-	def __init__(self, target, ID, queue):
+	def __init__(self, ID, queue):
 		super(Fuzzer, self).__init__(ID, queue) 
 		self.name = "generic fuzzer"
 		self.allexec = True
@@ -19,15 +19,18 @@ class Fuzzer(Scanner):
 
 	def scan(self, target):
 		for args,env in self.fuzz(target):
-			end_time = time.ctime() + self.trialTimeout
+			end_time = time.clock() + self.trialTimeout
 			p = process([target] + args, env=env)
 			self.communicate(p)
 			# This is a nasty busy loop... :(
-			while time.ctime() < end_time:
+			while time.clock() < end_time and p.poll() == None:
 				time.sleep(0.01)
 			if p.poll() == None:
 				p.kill()
 			else:
 				code = p.poll()
-				if os.WIFSIGNALED(code) and os.WTERMSIG(code) == signal.SIGSEGV:
-					self.hit('found segmentation fault!', str(args) + '\n' + str(env))
+				if (-code) == signal.SIGSEGV:
+					self.hit('found segmentation fault!', str(args) + ',' + str(env))
+
+	def communicate(self, p):
+		return
