@@ -2,7 +2,7 @@
 # @Author: Caleb Stewart
 # @Date:   2016-05-31 16:04:38
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 17:42:30
+# @Last Modified time: 2016-05-31 17:50:57
 from scan.scanner import Scanner
 from pwn import *
 import time
@@ -20,15 +20,19 @@ class Fuzzer(Scanner):
 	def scan(self, target):
 		for args,env in self.fuzz(target):
 			end_time = time.clock() + self.trialTimeout
-			p = process([target] + args, env=env)
-			self.communicate(p)
+			proc = process([target] + args, env=env)
+			self.communicate(proc)
+			p = log.progress('waiting for process')
 			# This is a nasty busy loop... :(
-			while time.clock() < end_time and p.poll() == None:
+			while time.clock() < end_time and proc.poll() == None:
+				p.status('still waiting...')
 				continue
-			if p.poll() == None:
-				p.kill()
+			if proc.poll() == None:
+				p.failure('process timeout')
+				proc.kill()
 			else:
-				code = p.poll()
+				p.success('process finished')
+				code = proc.poll()
 				if (-code) == signal.SIGSEGV:
 					self.hit('found segmentation fault!', str(args) + ',' + str(env))
 
