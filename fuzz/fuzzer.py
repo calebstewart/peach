@@ -2,7 +2,7 @@
 # @Author: Caleb Stewart
 # @Date:   2016-05-31 16:04:38
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 16:55:22
+# @Last Modified time: 2016-05-31 17:42:30
 from scan.scanner import Scanner
 from pwn import *
 import time
@@ -24,7 +24,7 @@ class Fuzzer(Scanner):
 			self.communicate(p)
 			# This is a nasty busy loop... :(
 			while time.clock() < end_time and p.poll() == None:
-				time.sleep(0.01)
+				continue
 			if p.poll() == None:
 				p.kill()
 			else:
