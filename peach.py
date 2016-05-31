@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
-# @Last Modified by:   caleb
-# @Last Modified time: 2016-05-30 12:11:35
+# @Last Modified by:   Caleb Stewart
+# @Last Modified time: 2016-05-31 16:28:55
 import argparse
 import json
 import os
@@ -31,7 +31,7 @@ class VulnerabilityScanner:
 	# Load a scan definition from a configuration file
 	def load_scan(self, classname):
 		# Load the module and extract the class
-		modulename = 'scan.' + '.'.join(classname.split('.')[:-1])
+		modulename = '.'.join(classname.split('.')[:-1])
 		pkg = __import__(modulename)
 		classobj = pkg # This will be the "scan" module first
 		for name in classname.split('.'):

@@ -1,14 +1,16 @@
-Vulnerability Scanning Framework
+Peach Fuzz - Vulnerability Scanning Framework
 ============
 
 This tool aims to look through files in a given directory to detect any unsafe, vulnerable, or dangerous function calls. It is designed to be extensible and easy to understand; you can "plug-and-play" modules that specify criteria on which types of files will trigger what 'scans,' in which you determine what action it should take to find and report dangerous content within each file.
+
+Also, it may be run as an experimental automated fuzzing tool. Given effective modules, the framework can be adapted to automatically fuzz executables. You may implement fuzzers using the generic `fuzz.fuzzer.Fuzzer` class. WARNING: this is a subclass of `scan.scanner.Scanner`, but will EXECUTE all files with executable permission! Be careful!
 
 Usage
 --------
 
 ```
-$ ./vulnscan.py -h
-usage: vulnscan.py [-h] [-nf] [-f] directory
+$ ./peach.py -h
+usage: peach.py [-h] [-nf] [-f] directory
 
 positional arguments:
   directory        base directory to evaluate
@@ -22,7 +24,7 @@ optional arguments:
 File & Directory Information
 ------
 
-* [`vulnscan.py`](vulnscan.py)
+* [`peach.py`](peach.py)
 
 	This is the core of the utility; the [Python] script that kickstarts all [threads] and scans from the given [command-line arguments]. 
 
@@ -32,15 +34,19 @@ File & Directory Information
 
 * [`vulnscan.json`](vulnscan.json)
 
-	This acts like the global configuation; in this [JSON] file you specify what scans you want to run for all of the files processed, and determine whatever criteria you want to use to identify those files (file extension, [MIME type], or executable).
+	This acts like the global configuation; in this [JSON] file you specify what scans you want to run for all of the files processed, and determine whatever criteria you want to use to identify those files (file extension, [MIME type], or executable). All scanners listed in this configuration should be merely that: scanners. No fuzzers should be listed here!
+
+* [`fuzzing.json`](fuzzing.json)
+
+	This file is similar to `vulnscan.json` except that it contains references to fuzzers and can be used to start automatically fuzzing a directory or file. WARNING: using this config will execute ALL files with executable permissions! Be careful using it!
 
 * [`test`](test/)
 
 	This directory holds anything that has been often used to test some of the scanners. You can add to it as you please.
 
-* [`colors`](colors/)
+* [`colors.py`](colors.py)
 
-	This small package (I don't know if I would even call it that) acts as a wrapper for [`colorama`][colorama], in an effort to supply some shorthand function calls.
+	This small module acts as a wrapper for [`colorama`][colorama], in an effort to supply some shorthand function calls.
 
 That's it! The idea behind the tool is simple; the real power comes from building scanners to detect and report any mischievous content or code in large amounts of unknown data. So add your own scanner!
  

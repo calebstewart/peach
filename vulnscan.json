@@ -1,6 +1,7 @@
 {
 	"scanners": [
-		"pythonscanner.ModuleScanner",
-		"pythonscanner.FunctionScanner"
+		"scan.pythonscanner.ModuleScanner",
+		"scan.pythonscanner.FunctionScanner",
+		"scan.phpscanner.FunctionScanner"
 	]
 } 
