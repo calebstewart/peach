@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 16:28:55
+# @Last Modified time: 2016-05-31 16:41:06
 import argparse
 import json
 import os
@@ -34,7 +34,7 @@ class VulnerabilityScanner:
 		modulename = '.'.join(classname.split('.')[:-1])
 		pkg = __import__(modulename)
 		classobj = pkg # This will be the "scan" module first
-		for name in classname.split('.'):
+		for name in classname.split('.')[1:]:
 			classobj = getattr(classobj, name)
 		scanner = classobj(len(self.scans), self.queue)
 
