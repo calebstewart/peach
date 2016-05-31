@@ -2,7 +2,7 @@
 # @Author: Caleb Stewart
 # @Date:   2016-05-31 16:04:38
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 18:21:48
+# @Last Modified time: 2016-05-31 18:24:45
 from scan.scanner import Scanner
 from pwn import *
 import time
@@ -32,17 +32,14 @@ class Fuzzer(Scanner):
 				proc.kill()
 			else:
 				p.success('process finished')
-				code = proc.poll()
-				if (-code) == signal.SIGSEGV:
-					time.sleep(0.5)
-					pid = proc.proc.pid
-					pattern = (r"""^\[[0-9.]*\] {0}\[{1}\]: segfault at .*$""").format(os.path.basename(target), pid)
-					#print pattern
-					output = subprocess.check_output('dmesg | tail', shell=True)
-					#print output
-					match = re.search(pattern, output, flags=re.M).group()
-					location = int(match.split(' ')[6], 16)
-					self.hit('segmentation fault', hex(location), info={'args':args, 'env':env, 'stdin':stdin, 'dmesg': match})
+				pid = proc.proc.pid
+				pattern = (r"""^\[[0-9.]*\] {0}\[{1}\]: segfault at .*$""").format(os.path.basename(target), pid)
+				dmesg_output = subprocess.check_output('dmesg | tail', shell=True)
+				match = re.search(pattern, dmesg_output, flags=re.M)
+				if match != None:
+					line = match.group()
+					location = int(line.split(' ')[6], 16)
+					self.hit('segmentation fault', hex(location), info={'args':args, 'env':env, 'stdin':stdin, 'dmesg': line})
 
 	def communicate(self, p):
 		return
