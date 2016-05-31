@@ -1,19 +1,19 @@
 {
     "scanners": [
-        "scan.pythonscanner.ModuleScanner", 
-        "scan.pythonscanner.FunctionScanner"
+        "fuzz.example.ExampleFuzzer"
     ], 
     "targets": {
-        "/home/caleb/Development/vulnscan/test/bad.py": [
+        "/home/caleb/Development/peach/test/bad": [
             {
-                "vuln": "importing unsafe module 'os'", 
-                "where": "line 6", 
-                "scanner": "scan.pythonscanner.ModuleScanner"
-            }, 
-            {
-                "vuln": "call to unsafe function 'system'", 
-                "where": "line 9", 
-                "scanner": "scan.pythonscanner.FunctionScanner"
+                "dmesg": "[575408.918656] bad[27209]: segfault at 0 ip 00007f2edcba360a sp 00007ffe773d9598 error 4 in libc-2.23.so[7f2edcb16000+197000]", 
+                "stdin": "", 
+                "scanner": "fuzz.example.ExampleFuzzer", 
+                "args": [], 
+                "event": "HIT", 
+                "vuln": "segmentation fault", 
+                "env": null, 
+                "where": "0x7f2edcba360a", 
+                "id": 0
             }
         ]
     }

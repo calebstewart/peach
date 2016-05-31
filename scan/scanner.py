@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: caleb
 # @Date:   2016-05-27 00:19:49
-# @Last Modified by:   caleb
-# @Last Modified time: 2016-05-29 15:45:06
+# @Last Modified by:   Caleb Stewart
+# @Last Modified time: 2016-05-31 18:04:12
 import threading
 import os
 import mimetypes
@@ -55,8 +55,9 @@ class Scanner(object):
 		finally:
 			self.queue.put({ 'id': self.ID, 'event': Scanner.FINISHED})
 
-	def hit(self, vuln, where):
-		self.queue.put({ 'id': self.ID, 'event': Scanner.HIT, 'vuln': vuln, 'where': where})
+	def hit(self, vuln, where, info = {}):
+		info.update({ 'id': self.ID, 'event': Scanner.HIT, 'vuln': vuln, 'where': where})
+		self.queue.put(info)
 
 	# Method to check if the scan matches the target
 	# 	You may override this in subclasses, but that will

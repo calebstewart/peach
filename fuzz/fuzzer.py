@@ -2,7 +2,7 @@
 # @Author: Caleb Stewart
 # @Date:   2016-05-31 16:04:38
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 17:50:57
+# @Last Modified time: 2016-05-31 18:21:48
 from scan.scanner import Scanner
 from pwn import *
 import time
@@ -18,10 +18,10 @@ class Fuzzer(Scanner):
 		self.trialTimeout = 5 # Maximum of 5 second timeout per fuzzer trial
 
 	def scan(self, target):
-		for args,env in self.fuzz(target):
+		for args,env,stdin in self.fuzz(target):
 			end_time = time.clock() + self.trialTimeout
 			proc = process([target] + args, env=env)
-			self.communicate(proc)
+			proc.send(stdin)
 			p = log.progress('waiting for process')
 			# This is a nasty busy loop... :(
 			while time.clock() < end_time and proc.poll() == None:
@@ -34,7 +34,15 @@ class Fuzzer(Scanner):
 				p.success('process finished')
 				code = proc.poll()
 				if (-code) == signal.SIGSEGV:
-					self.hit('found segmentation fault!', str(args) + ',' + str(env))
+					time.sleep(0.5)
+					pid = proc.proc.pid
+					pattern = (r"""^\[[0-9.]*\] {0}\[{1}\]: segfault at .*$""").format(os.path.basename(target), pid)
+					#print pattern
+					output = subprocess.check_output('dmesg | tail', shell=True)
+					#print output
+					match = re.search(pattern, output, flags=re.M).group()
+					location = int(match.split(' ')[6], 16)
+					self.hit('segmentation fault', hex(location), info={'args':args, 'env':env, 'stdin':stdin, 'dmesg': match})
 
 	def communicate(self, p):
 		return

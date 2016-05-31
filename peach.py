@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 16:46:43
+# @Last Modified time: 2016-05-31 17:59:18
 import argparse
 import json
 import os
@@ -93,11 +93,11 @@ class VulnerabilityScanner:
 		if self.output == None:
 			log.warn('%s (%s): %s' % (c(target), mesg['where'], R(mesg['vuln'])))
 		else:
-			result = {
-				'scanner': scanner.__module__ + '.' + scanner.__class__.__name__,
-				'vuln': mesg['vuln'],
-				'where': mesg.get('where', ''),
-			}
+			result = mesg
+			result['where'] = result.get('where', '')
+			result.update({
+				'scanner': scanner.__module__ + '.' + scanner.__class__.__name__
+			})
 			if self.results['targets'].get(os.path.abspath(target), None) == None:
 				self.results['targets'][os.path.abspath(target)] = []
 			self.results['targets'][os.path.abspath(target)].append(result)
