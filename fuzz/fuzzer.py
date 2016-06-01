@@ -2,7 +2,7 @@
 # @Author: Caleb Stewart
 # @Date:   2016-05-31 16:04:38
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 18:24:45
+# @Last Modified time: 2016-05-31 18:25:42
 from scan.scanner import Scanner
 from pwn import *
 import time
@@ -40,6 +40,3 @@ class Fuzzer(Scanner):
 					line = match.group()
 					location = int(line.split(' ')[6], 16)
 					self.hit('segmentation fault', hex(location), info={'args':args, 'env':env, 'stdin':stdin, 'dmesg': line})
-
-	def communicate(self, p):
-		return

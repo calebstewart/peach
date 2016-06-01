@@ -3,7 +3,7 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 17:59:18
+# @Last Modified time: 2016-05-31 19:04:08
 import argparse
 import json
 import os
@@ -119,8 +119,9 @@ class VulnerabilityScanner:
 # Parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('paths', nargs='+', help='files and directories to scan')
-parser.add_argument('-nf', '--nofollow', action='store_false', dest='follow', help='don\'t follow symlinks (default)')
-parser.add_argument('-f', '--follow', action='store_true', dest='follow', default=False, help='follow symlinks')
+parser.add_argument('-s', '--scan', action='store_const', dest='config', const='vulnscan.json', help='use configuration file for vulnerability scanning (vulnscan.json).')
+parser.add_argument('-f', '--fuzz', action='store_const', dest='config', const='fuzzing.json', help='use configuration file for automated fuzzing (fuzzing.json).')
+parser.add_argument('--follow', action='store_true', help='follow symbolic links when scanning directories')
 parser.add_argument('-c', '--config', action='store', default='vulnscan.json', help='specify a custom configuration file (default: vulnscan.json)')
 parser.add_argument('-o', '--output', action='store', default=None, help='output results to the specified JSON file')
 parser.add_argument('-sh', '--scan-hidden', action='store_true', default=True, dest='scanHidden', help='Scan hidden files and directories (default)')

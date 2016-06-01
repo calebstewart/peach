@@ -10,15 +10,26 @@ Usage
 
 ```
 $ ./peach.py -h
-usage: peach.py [-h] [-nf] [-f] directory
+usage: peach.py [-h] [-s] [-f] [--follow] [-c CONFIG] [-o OUTPUT] [-sh] [-nh]
+                paths [paths ...]
 
 positional arguments:
-  directory        base directory to evaluate
+  paths                 files and directories to scan
 
 optional arguments:
-  -h, --help       show this help message and exit
-  -nf, --nofollow  don't follow symlinks
-  -f, --follow     follow symlinks (default)
+  -h, --help            show this help message and exit
+  -s, --scan            use configuration file for vulnerability scanning
+                        (vulnscan.json).
+  -f, --fuzz            use configuration file for automated fuzzing
+                        (fuzzing.json).
+  --follow              follow symbolic links when scanning directories
+  -c CONFIG, --config CONFIG
+                        specify a custom configuration file (default:
+                        vulnscan.json)
+  -o OUTPUT, --output OUTPUT
+                        output results to the specified JSON file
+  -sh, --scan-hidden    Scan hidden files and directories (default)
+  -nh, --no-hidden      Do not scan hidden files and directories
 ```
 
 File & Directory Information
