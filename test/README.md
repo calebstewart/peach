@@ -1,13 +1,4 @@
-Vulnerability Scanning Framework :: `test`
-============
+Peach Fuzz - Test
+=================
 
-This directory hosts all the classes that can be duplicated and extended for specific file "scans," in which you could do pretty much anything you want. They are just housed in this folder to keep things clean.
- 
-[JSON]: https://en.wikipedia.org/wiki/JSON
-[MIME type]: https://en.wikipedia.org/wiki/Media_type
-[Python]: http://python.org/
-[thread]: https://en.wikipedia.org/wiki/Thread_%28computing%29
-[threads]: https://en.wikipedia.org/wiki/Thread_%28computing%29
-[command-line arguments]: https://www.cs.bu.edu/teaching/c/program-args/
-[program arguments]: https://www.cs.bu.edu/teaching/c/program-args/
-[ELF]: https://en.wikipedia.org/wiki/Executable_and_Linkable_Format
+This directory houses test sources, scripts and executables for the peach scanners to try their luck on. These scripts are _probably_ harmless, but you should not just go around running them. If you add new ones, they should be harmless. Simply demonstrating some basic vulnerabilities like SQL injection, printf/scanf, buffer overflows, etc.
