@@ -2,7 +2,7 @@
 # @Author: Caleb Stewart
 # @Date:   2016-05-31 16:04:38
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 19:35:34
+# @Last Modified time: 2016-06-01 00:37:39
 from scan.scanner import Scanner
 from pwn import *
 import time
@@ -21,7 +21,8 @@ class Fuzzer(Scanner):
 		for args,env,stdin,done_on_segfault in self.fuzz(target):
 			end_time = time.clock() + self.trialTimeout
 			proc = process([target] + args, env=env)
-			proc.send(stdin)
+			if proc.connected():
+				proc.send(stdin)
 			p = log.progress('waiting for process')
 			# This is a nasty busy loop... :(
 			while time.clock() < end_time and proc.poll() == None:

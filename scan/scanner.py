@@ -2,11 +2,12 @@
 # @Author: caleb
 # @Date:   2016-05-27 00:19:49
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 18:04:12
+# @Last Modified time: 2016-06-01 11:22:03
 import threading
 import os
 import mimetypes
 from pwn import *
+import copy
 
 # Generic scanner class
 class Scanner(object):
@@ -57,7 +58,7 @@ class Scanner(object):
 
 	def hit(self, vuln, where, info = {}):
 		info.update({ 'id': self.ID, 'event': Scanner.HIT, 'vuln': vuln, 'where': where})
-		self.queue.put(info)
+		self.queue.put(copy.deepcopy(info))
 
 	# Method to check if the scan matches the target
 	# 	You may override this in subclasses, but that will
