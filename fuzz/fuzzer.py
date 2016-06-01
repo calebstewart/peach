@@ -2,7 +2,7 @@
 # @Author: Caleb Stewart
 # @Date:   2016-05-31 16:04:38
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 18:25:42
+# @Last Modified time: 2016-05-31 19:35:34
 from scan.scanner import Scanner
 from pwn import *
 import time
@@ -18,7 +18,7 @@ class Fuzzer(Scanner):
 		self.trialTimeout = 5 # Maximum of 5 second timeout per fuzzer trial
 
 	def scan(self, target):
-		for args,env,stdin in self.fuzz(target):
+		for args,env,stdin,done_on_segfault in self.fuzz(target):
 			end_time = time.clock() + self.trialTimeout
 			proc = process([target] + args, env=env)
 			proc.send(stdin)
@@ -40,3 +40,5 @@ class Fuzzer(Scanner):
 					line = match.group()
 					location = int(line.split(' ')[6], 16)
 					self.hit('segmentation fault', hex(location), info={'args':args, 'env':env, 'stdin':stdin, 'dmesg': line})
+					if done_on_segfault:
+						break

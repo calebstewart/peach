@@ -1,19 +1,20 @@
 {
     "scanners": [
-        "fuzz.example.ExampleFuzzer"
+        "fuzz.example.ExampleFuzzer", 
+        "fuzz.stdin.StdinFuzzer"
     ], 
     "targets": {
         "/home/caleb/Development/peach/test/bad": [
             {
-                "dmesg": "[575408.918656] bad[27209]: segfault at 0 ip 00007f2edcba360a sp 00007ffe773d9598 error 4 in libc-2.23.so[7f2edcb16000+197000]", 
-                "stdin": "", 
-                "scanner": "fuzz.example.ExampleFuzzer", 
+                "dmesg": "[583898.472331] bad[29025]: segfault at 66616161 ip 000000000804846f sp 0000000066616161 error 4 in bad[8048000+1000]", 
+                "stdin": "aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaazaabbaabcaabdaabeaabfaabgaabhaabiaabjaabkaablaabmaabnaaboaabpaabqaabraabsaabtaabuaabvaabwaabxaabyaabzaacbaaccaacdaaceaacfaacgaachaaciaacjaackaaclaacmaacnaacoaacpaacqaacraacsaactaacuaacvaacwaacxaacyaaczaadbaadcaaddaadeaadfaadgaadhaadiaadjaadkaadlaadmaadnaadoaadpaadqaadraadsaadtaaduaadvaadwaadxaadyaadzaaebaaecaaedaaeeaaefaaegaaehaaeiaaejaaekaaelaaemaaenaaeoaaepaaeqaaeraaesaaetaaeuaaevaaewaaexaaeyaaezaafbaafcaafdaafeaaffaafgaafhaafiaafjaafkaaflaafmaafnaafoaafpaafqaafraafsaaftaafuaafvaafwaafxaafyaaf\n", 
+                "scanner": "fuzz.stdin.StdinFuzzer", 
                 "args": [], 
                 "event": "HIT", 
                 "vuln": "segmentation fault", 
                 "env": null, 
-                "where": "0x7f2edcba360a", 
-                "id": 0
+                "where": "0x804846f", 
+                "id": 1
             }
         ]
     }

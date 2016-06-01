@@ -1,5 +1,6 @@
 {
 	"scanners": [
-		"fuzz.example.ExampleFuzzer"
+		"fuzz.example.ExampleFuzzer",
+		"fuzz.stdin.StdinFuzzer"
 	]
 }
