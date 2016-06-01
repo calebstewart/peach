@@ -10,9 +10,7 @@ There should be __NO__ [fuzzers][2] implemented here! All scanner should be pass
 Scanner Base Class
 ------------------
 
-Methods:
-
-__`def __init__(self, scannerId, mesgQueue)`__
+__`def \_\_init\_\_(self, scannerId, mesgQueue)`__
 
 	You must pass the parameters up to the Scanner base class constructor before any other setup code. Here, you may setup things like your scanner name, and default match criteria (see Members below).
 
@@ -27,8 +25,6 @@ __`def match(self, target)`__
 __`def hit(description, location, info={})`__
 
 	Called during the scan function by the subclass. Reports a scan hit back to the main scanning thread which will either log it to the console or to the output file. If `info` is provided, its contents will be dumped to the output file along with the description and location. If no output file is given (e.g. output is going to the command line), then info is ignored.
-
-Members:
 
 __`self.name`__
 	
