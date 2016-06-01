@@ -10,35 +10,35 @@ There should be __NO__ [fuzzers][2] implemented here! All scanner should be pass
 Scanner Base Class
 ------------------
 
-__`def __init__(self, scannerId, mesgQueue)`__
+**`def __init__(self, scannerId, mesgQueue)`**
 
 You must pass the parameters up to the Scanner base class constructor before any other setup code. Here, you may setup things like your scanner name, and default match criteria (see Members below).
 
-__`def scan(self, target)`__
+**`def scan(self, target)`**
 	
 Expected to be overridden by subclasses. Called after matching a target to the scanner. Returns nothing, but calls the `hit` method for each scan hit.
 
-__`def match(self, target)`__
+**`def match(self, target)`**
 
 Attempts to match the given target to the scanner. If the target matches, return True. By default, this method evaluates the `mimeTypes`,`extensions`, and `allexec` members to match the target, but may be overridden to provide custom matching.
 
-__`def hit(description, location, info={})`__
+**`def hit(description, location, info={})`**
 
 Called during the scan function by the subclass. Reports a scan hit back to the main scanning thread which will either log it to the console or to the output file. If `info` is provided, its contents will be dumped to the output file along with the description and location. If no output file is given (e.g. output is going to the command line), then info is ignored.
 
-__`self.name`__
+**`self.name`**
 	
 The name of the scanner. Given in the context `"started {0} on file {1}".format(self.name, target)`. For example, "python import scanner".
 
-__`self.mimeTypes`__
+**`self.mimeTypes`**
 
 Array of matching MIME Types. The targets [MIME type] is guessed using the python module `mimetypes` like so: `mimetypes.guess_type(target, strict=False)`.
 
-__`self.extensions`__
+**`self.extensions`**
 
 The list of file extensions that match the target to the scanner. These extensions include the dot (e.g. the extension for C++ source file is ".cpp").
 
-__`self.allexec`__
+**`self.allexec`**
 
 A true or false value specifying whether or not to match every executable file.
 
