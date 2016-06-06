@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # @Author: caleb
 # @Date:   2016-05-27 00:02:36
-# @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-05-31 19:04:08
+# @Last Modified by:   John Hammond
+# @Last Modified time: 2016-06-06 15:45:58
 import argparse
 import json
 import os
@@ -12,6 +12,7 @@ from pwn import *
 from colors import *
 from scan.scanner import Scanner
 import stat
+
 
 class VulnerabilityScanner:
 
@@ -28,6 +29,7 @@ class VulnerabilityScanner:
 			'targets': { }
 		}
 
+
 	# Load a scan definition from a configuration file
 	def load_scan(self, classname):
 		# Load the module and extract the class
@@ -41,13 +43,16 @@ class VulnerabilityScanner:
 		# Add the new scan
 		self.scans.append(scanner)
 
+
 	# Load a configuration file
 	def load_config(self, filename):
-		try:
-			with open(filename) as file:
-				self.config = json.load(file)
-		except Exception as e:
-			raise e
+		# try:
+		with open(filename) as file:
+			self.config = json.load(file)
+		# except Exception as e:
+			# This raises a TypeError even when a default config should be selected
+			# raise e
+
 			#log.error('unable to load config file.')
 			#pass
 
@@ -64,6 +69,7 @@ class VulnerabilityScanner:
 				dirlist[:] = [d for d in dirlist if not d.startswith('.')]
 			for f in filelist:
 				self.scan(os.path.join(dirname, f))
+
 
 	# Run all matching scanners on the given file path
 	def scan_file(self, path):
@@ -89,6 +95,7 @@ class VulnerabilityScanner:
 
 		log.info('finished scanning %s' % C(os.path.basename(path)))
 
+
 	def log(self, target, scanner, mesg):
 		if self.output == None:
 			log.warn('%s (%s): %s' % (c(target), mesg['where'], R(mesg['vuln'])))
@@ -102,9 +109,11 @@ class VulnerabilityScanner:
 				self.results['targets'][os.path.abspath(target)] = []
 			self.results['targets'][os.path.abspath(target)].append(result)
 
+
 	def dump(self, filename):
 		with open(filename, 'w') as file:
 			json.dump(self.results, file, indent=4)
+
 
 	# Scan a directory or a filename
 	def scan(self, filepath):
@@ -119,10 +128,10 @@ class VulnerabilityScanner:
 # Parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('paths', nargs='+', help='files and directories to scan')
+parser.add_argument('-c', '--config', action='store', default='vulnscan.json', help='specify a custom configuration file (default: vulnscan.json)')
 parser.add_argument('-s', '--scan', action='store_const', dest='config', const='vulnscan.json', help='use configuration file for vulnerability scanning (vulnscan.json).')
 parser.add_argument('-f', '--fuzz', action='store_const', dest='config', const='fuzzing.json', help='use configuration file for automated fuzzing (fuzzing.json).')
 parser.add_argument('--follow', action='store_true', help='follow symbolic links when scanning directories')
-parser.add_argument('-c', '--config', action='store', default='vulnscan.json', help='specify a custom configuration file (default: vulnscan.json)')
 parser.add_argument('-o', '--output', action='store', default=None, help='output results to the specified JSON file')
 parser.add_argument('-sh', '--scan-hidden', action='store_true', default=True, dest='scanHidden', help='Scan hidden files and directories (default)')
 parser.add_argument('-nh', '--no-hidden', action='store_false', dest='scanHidden', help='Do not scan hidden files and directories')

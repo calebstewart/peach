@@ -2,6 +2,7 @@
 	"scanners": [
 		"scan.pythonscanner.ModuleScanner",
 		"scan.pythonscanner.FunctionScanner",
+		"scan.pythonscanner.SQLScanner",
 		"scan.phpscanner.FunctionScanner",
 		"scan.binary.ElfScanner"
 	]

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: caleb
 # @Date:   2016-05-29 14:23:44
-# @Last Modified by:   caleb
-# @Last Modified time: 2016-05-30 12:40:07
+# @Last Modified by:   John Hammond
+# @Last Modified time: 2016-06-06 14:00:16
 from scanner import Scanner
 import re
 
@@ -44,7 +44,7 @@ class RegexScannerExample(RegexScanner):
 		super(RegexScannerExample, self).__init__(scannerId, mesgQueue)
 		self.name = 'regex example scanner'
 		self.mimeTypes = [ 'text/plain' ]
-		self.patters = [
+		self.patterns = [
 			{
 				'name': 'example pattern',
 				're': re.compile('example', re.IGNORECASE)
