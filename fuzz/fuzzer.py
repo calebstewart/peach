@@ -16,14 +16,22 @@ class Fuzzer(Scanner):
 		self.name = "generic fuzzer"
 		self.allexec = True
 		self.trialTimeout = 5 # Maximum of 5 second timeout per fuzzer trial
+		self.count = '?'
 
-	def scan(self, target):
+	def scan(self, target, progress):
+		context.log_level = 'WARNING'
+		iternum = 0
 		for args,env,stdin,done_on_segfault in self.fuzz(target):
+			progress.status('executing iteration {0}/{1}'.format(iternum, self.count))
+			iternum = iternum + 1
 			end_time = time.clock() + self.trialTimeout
 			proc = process([target] + args, env=env)
 			if proc.connected():
-				proc.send(stdin)
-			p = log.progress('waiting for process')
+				try:
+					proc.send(stdin)
+				except EOFError as e:
+					pass
+			p = log.progress('waiting for process', level='DEBUG')
 			# This is a nasty busy loop... :(
 			while time.clock() < end_time and proc.poll() == None:
 				p.status('still waiting...')

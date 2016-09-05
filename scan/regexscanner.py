@@ -21,7 +21,7 @@ class RegexScanner(Scanner):
 		super(RegexScanner, self).__init__(scannerId, mesgQueue)
 		self.name = 'regex scanner'
 
-	def scan(self, target):
+	def scan(self, target, status):
 		with open(target) as file:
 			for lineno, line in enumerate(file):
 				for p in self.patterns:

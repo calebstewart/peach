@@ -13,7 +13,7 @@ class ElfScanner(Scanner):
 		self.name = 'elf scanner'
 		self.bad_funcs = [ 'system', 'gets' ]
 
-	def scan(self, target):
+	def scan(self, target, progress):
 		elf = ELF(target)
 		for f in self.bad_funcs:
 			if f in elf.symbols:

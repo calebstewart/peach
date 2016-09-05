@@ -40,7 +40,7 @@ class ExampleScanner(Scanner):
 		# self.allexec = False
 
 	# This function will be called for every matching target
-	def scan(self, target):
+	def scan(self, target, progress):
 		# To log a matching vulnerability, call the "hit" member.
 		# The first parameter is a short description of the hit,
 		# and the second is where it was found. Think of it in

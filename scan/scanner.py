@@ -31,15 +31,15 @@ class Scanner(object):
 		return
 
 	# The subclass should redefine this!
-	def scan(self, target):
-		log.error('Scanner subclass did not implement the scan method!')
+	def scan(self, target, progress):
+		progress.status('Scanner subclass did not implement the scan method!')
 		return
 
 	# This class used to subclass Thread, but... now it doesn't.
-	def start(self, target):
+	def start(self, target, progress):
 		if self.thread != None:
 			return
-		self.thread = threading.Thread(target=self.run, args=(target,))
+		self.thread = threading.Thread(target=self.run, args=(target,progress))
 		self.thread.start()
 
 	# Wait for the scan to finish
@@ -50,9 +50,9 @@ class Scanner(object):
 		self.thread = None
 
 	# Run the scanner, then signal the parent we are done.
-	def run(self, target):
+	def run(self, target, progress):
 		try:
-			self.scan(target)
+			self.scan(target, progress)
 		finally:
 			self.queue.put({ 'id': self.ID, 'event': Scanner.FINISHED})
 

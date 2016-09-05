@@ -6,12 +6,13 @@
 from fuzz.fuzzer import Fuzzer
 from pwn import *
 
-class StdinFuzzer(Fuzzer):
+class CyclicFuzzer(Fuzzer):
 
 	def __init__(self, ID, queue):
-		super(StdinFuzzer, self).__init__(ID, queue)
-		self.name = 'stdin fuzzer'
+		super(CyclicFuzzer, self).__init__(ID, queue)
+		self.name = 'cyclic input fuzzer'
+		self.count = len(range(100,1100,100))
 
 	def fuzz(self, target):
-		for length in range(100, 1000, 100):
+		for length in range(100, 1100, 100):
 			yield ([], None, cyclic(length) + '\n', True) 

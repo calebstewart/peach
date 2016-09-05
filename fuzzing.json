@@ -1,6 +1,10 @@
 {
 	"scanners": [
-		"fuzz.example.ExampleFuzzer",
-		"fuzz.stdin.StdinFuzzer"
+		"fuzz.stdin.cyclic.CyclicFuzzer",
+		"fuzz.stdin.format-string.FormatStringFuzzer",
+		"fuzz.stdin.integer-overflow.IntegerOverflowFuzzer",
+		"fuzz.stdin.unix.GenericUnixFuzzer",
+		"fuzz.stdin.windows.GenericWindowsFuzzer",
+		"fuzz.stdin.xplatform.GenericXPlatformFuzzer"
 	]
 }

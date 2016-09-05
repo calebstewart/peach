@@ -74,12 +74,14 @@ class VulnerabilityScanner:
 	# Run all matching scanners on the given file path
 	def scan_file(self, path):
 		active_scans = 0
+		progress = []
 		# Match scanners to the file and start them
 		for scan in self.scans:
 			if scan.match(path):
-				log.info('started {0} for target {1}'.format(y(scan.name), C(os.path.basename(path))))
+				p = log.progress('{0} on {1}'.format(y(scan.name), C(os.path.basename(path))), 'starting...', level='WARNING')
 				active_scans = active_scans + 1
-				scan.start(path)
+				scan.start(path, p)
+				progress.append(p)
 
 		# Wait for scanners to finish
 		while active_scans != 0:
@@ -87,6 +89,7 @@ class VulnerabilityScanner:
 			if msg['event'] == Scanner.FINISHED:
 				self.scans[msg['id']].wait()
 				active_scans = active_scans - 1
+				progress[msg['id']].success(Y('completed'))
 			elif msg['event'] == 'HIT':
 				self.log(path, self.scans[msg['id']], msg)
 
@@ -98,7 +101,8 @@ class VulnerabilityScanner:
 
 	def log(self, target, scanner, mesg):
 		if self.output == None:
-			log.warn('%s (%s): %s' % (c(target), mesg['where'], R(mesg['vuln'])))
+			log.warn('%s yielded a %s in %s at %s', y(scanner.name), R(mesg['vuln']), C(target), mesg['where'])
+			#log.warn('%s (%s): %s' % (c(target), mesg['where'], R(mesg['vuln'])))
 		else:
 			result = mesg
 			result['where'] = result.get('where', '')
@@ -138,6 +142,8 @@ parser.add_argument('-nh', '--no-hidden', action='store_false', dest='scanHidden
 # Not implemented yet
 #parser.add_argument('-t', '--timeout', action='store', type=float, default=5, help='timeout for each scan in seconds (default: 5)')
 args = parser.parse_args()
+
+context.log_level = 'INFO'
 
 scanner = VulnerabilityScanner(scanHidden=args.scanHidden, follow=args.follow, config=args.config, output=args.output)
 for path in args.paths:
