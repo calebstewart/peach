@@ -51,3 +51,4 @@ class Fuzzer(Scanner):
 					self.hit('segmentation fault', hex(location), info={'args':args, 'env':env, 'stdin':stdin, 'dmesg': line})
 					if done_on_segfault:
 						break
+			del(proc)

@@ -11,8 +11,10 @@ class CyclicFuzzer(Fuzzer):
 	def __init__(self, ID, queue):
 		super(CyclicFuzzer, self).__init__(ID, queue)
 		self.name = 'cyclic input fuzzer'
-		self.count = len(range(100,1100,100))
+		self.start_length = 100
+		self.end_length = 10000
+		self.count = len(range(self.start_length, self.end_length,100))
 
 	def fuzz(self, target):
-		for length in range(100, 1100, 100):
+		for length in range(self.start_length, self.end_length,100):
 			yield ([], None, cyclic(length) + '\n', True) 

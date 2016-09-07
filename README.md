@@ -60,6 +60,11 @@ File & Directory Information
 	This small module acts as a wrapper for [`colorama`][colorama], in an effort to supply some shorthand function calls.
 
 That's it! The idea behind the tool is simple; the real power comes from building scanners to detect and report any mischievous content or code in large amounts of unknown data. So add your own scanner!
+
+Note
+----
+
+You may need to increase the maximum number of open files on your system in order to use all the fuzzers provided with this tool. Due to the fuzzers being run simultaneously, a large number of open files quickly accrues. On most modern systems, the limit is placed at 1024, which will cause a "Out of files" (EMFILE) error. Increasing the max open file count for your system should solve the problem.
  
 [JSON]: https://en.wikipedia.org/wiki/JSON
 [MIME type]: https://en.wikipedia.org/wiki/Media_type
