@@ -47,7 +47,6 @@ class Scanner(object):
 		if self.thread == None:
 			return
 		self.thread.join(timeout=timeout)
-		del(self.thread)
 		self.thread = None
 
 	# Run the scanner, then signal the parent we are done.

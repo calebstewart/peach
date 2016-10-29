@@ -74,22 +74,22 @@ class VulnerabilityScanner:
 	# Run all matching scanners on the given file path
 	def scan_file(self, path):
 		active_scans = 0
-		progress = []
+		progress = [ None ] * len(self.scans)
 		# Match scanners to the file and start them
 		for scan in self.scans:
 			if scan.match(path):
 				p = log.progress('{0} on {1}'.format(y(scan.name), C(os.path.basename(path))), 'starting...', level='WARNING')
 				active_scans = active_scans + 1
 				scan.start(path, p)
-				progress.append(p)
+				progress[active_scans-1] = p
 
 		# Wait for scanners to finish
 		while active_scans != 0:
 			msg = self.queue.get()
 			if msg['event'] == Scanner.FINISHED:
+				progress[msg['id']].success(Y('completed'))
 				self.scans[msg['id']].wait()
 				active_scans = active_scans - 1
-				progress[msg['id']].success(Y('completed'))
 			elif msg['event'] == 'HIT':
 				self.log(path, self.scans[msg['id']], msg)
 

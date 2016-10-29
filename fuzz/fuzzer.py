@@ -2,7 +2,7 @@
 # @Author: Caleb Stewart
 # @Date:   2016-05-31 16:04:38
 # @Last Modified by:   Caleb Stewart
-# @Last Modified time: 2016-06-01 00:37:39
+# @Last Modified time: 2016-10-29 12:50:38
 from scan.scanner import Scanner
 from pwn import *
 import time
@@ -42,12 +42,13 @@ class Fuzzer(Scanner):
 			else:
 				p.success('process finished')
 				pid = proc.proc.pid
-				pattern = (r"""^\[[0-9.]*\] {0}\[{1}\]: segfault at .*$""").format(os.path.basename(target), pid)
+				pattern = (r"""^\[.*\] {0}\[{1}\]: segfault at ([0-9a-fA-F]+) ip ([0-9a-fA-F]+) .*$""").format(os.path.basename(target), pid)
 				dmesg_output = subprocess.check_output('dmesg | tail', shell=True)
 				match = re.search(pattern, dmesg_output, flags=re.M)
 				if match != None:
 					line = match.group()
-					location = int(line.split(' ')[6], 16)
+					#location = int(line.split(' ')[6], 16)
+					location = int(match.group(2), 16)
 					self.hit('segmentation fault', hex(location), info={'args':args, 'env':env, 'stdin':stdin, 'dmesg': line})
 					if done_on_segfault:
 						break
